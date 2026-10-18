@@ -1,9 +1,13 @@
 package com.academico;
+import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryJson;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
+import com.academico.presentation.CursoUI;
 import com.academico.presentation.EstudianteUI;
 
+import com.academico.application.service.CursoService;
 import com.academico.application.service.EstudianteService;
+import com.academico.domain.repository.CursoRepository;
 import com.academico.domain.repository.EstudianteRepository;
 
 import  java.util.Scanner;
@@ -15,13 +19,16 @@ public class Main {
         // 1. Adaptador de salida: almacena en JSON
         EstudianteRepository repository=new EstudianteRepositoryJson();
         //EstudianteRepository repository=new EstudianteRepositoryPostgres();
+        CursoRepository cursoRepository=new CursoRepositoryJson();
 
 
         //2. Nucleo de la aplicacion: caso de uso
         EstudianteService service=new EstudianteService(repository);
+        CursoService cursoService=new CursoService(cursoRepository);
 
         // presentacion
         EstudianteUI estudianteUI=new EstudianteUI(service);
+        CursoUI cursoUI=new CursoUI(cursoService);
 
 
         Scanner sc = new Scanner(System.in);
@@ -45,7 +52,7 @@ public class Main {
                     break;
 
                 case 2:
-                   // CursoUI.mostrarMenu(sc);
+                    cursoUI.mostrarMenu(sc);
                     break;
 
                 case 0:
