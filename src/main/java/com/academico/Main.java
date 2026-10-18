@@ -1,5 +1,6 @@
 package com.academico;
 import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
+import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryPostgres;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryJson;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
 import com.academico.presentation.CursoUI;
@@ -16,10 +17,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // 1. Adaptador de salida: almacena en JSON
-        EstudianteRepository repository=new EstudianteRepositoryJson();
-        //EstudianteRepository repository=new EstudianteRepositoryPostgres();
-        CursoRepository cursoRepository=new CursoRepositoryJson();
+        // 1. Adaptadores de salida
+        // Opcion A: archivos JSON
+        //EstudianteRepository repository=new EstudianteRepositoryJson();
+        //CursoRepository cursoRepository=new CursoRepositoryJson();
+
+        // Opcion B: base de datos PostgreSQL
+        EstudianteRepository repository=new EstudianteRepositoryPostgres();
+        CursoRepository cursoRepository=new CursoRepositoryPostgres();
 
 
         //2. Nucleo de la aplicacion: caso de uso
