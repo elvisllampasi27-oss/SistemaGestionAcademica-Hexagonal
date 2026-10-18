@@ -1,6 +1,8 @@
 # Sistema de Gestión Académica – Arquitectura Hexagonal
 
-Laboratorio 04 – IS488. Aplicación de consola en Java que gestiona **estudiantes** y **cursos** (registrar, listar, actualizar y eliminar) usando el patrón **Puertos y Adaptadores**.
+Laboratorio N.° 04 – IS488 Arquitectura de Software (UNSCH, 2026-II).
+
+Aplicación de consola en Java que gestiona **estudiantes** y **cursos** (registrar, listar, actualizar y eliminar) aplicando el patrón **Puertos y Adaptadores**. Los datos pueden guardarse en archivos **JSON** o en **PostgreSQL** sin modificar los casos de uso.
 
 ## Estructura
 
@@ -14,37 +16,39 @@ com.academico
 │   └── service          EstudianteService, CursoService         (casos de uso)
 ├── infrastructure
 │   └── adapter/out/persistence
-│                        EstudianteRepositoryJson, EstudianteRepositoryPostgres, CursoRepositoryJson
+│                        EstudianteRepositoryJson, CursoRepositoryJson,
+│                        EstudianteRepositoryPostgres, CursoRepositoryPostgres
 ├── presentation         EstudianteUI, CursoUI                   (adaptadores de entrada)
 └── Main                 crea los adaptadores y los inyecta en los servicios
 ```
 
 ## Requisitos
 
-- JDK 21
-- Maven (incluido en IntelliJ IDEA)
+- JDK 21 y Maven (incluido en IntelliJ IDEA)
+- PostgreSQL 18 (solo para la opción con base de datos)
 
 ## Cómo ejecutar
 
 1. Abrir el proyecto en IntelliJ IDEA y recargar Maven.
-2. Ejecutar `Main.java`.
-3. Los datos se guardan en `data/estudiantes.json` y `data/cursos.json`.
-
-Para usar PostgreSQL en lugar de JSON, en `Main.java` se cambia la línea del repositorio por `EstudianteRepositoryPostgres` y se define la variable de entorno `DB_PASSWORD`.
+2. Elegir el almacenamiento en `Main.java`:
+    - **Opción A – JSON:** usa `data/estudiantes.json` y `data/cursos.json`.
+    - **Opción B – PostgreSQL (activa):** crear la base `sistema_gestion_academica`, ejecutar `bd.sql` y definir la variable de entorno `DB_PASSWORD` en la configuración de ejecución.
+3. Ejecutar `Main.java`.
 
 ## Validaciones (RF06)
 
 - No se puede registrar un estudiante o curso con un ID que ya existe.
-- Al actualizar o eliminar un ID que no existe, se muestra "no encontrado".
+- Al actualizar o eliminar un ID inexistente se muestra "no encontrado".
 
-## Ramas usadas
+## Ramas
 
 | Rama | Cambio |
 |---|---|
 | `feature/repositorio-json` | Completa el adaptador JSON de estudiantes |
 | `feature/validaciones-rf06` | Valida ID duplicado |
 | `feature/curso-hexagonal` | Cursos con puertos, adaptador JSON e inyección en Main |
+| `feature/postgresql` | Adaptador PostgreSQL de cursos y script `bd.sql` |
 
 ## Autor
 
-Elvis Llampasi – Universidad Nacional de San Cristóbal de Huamanga
+Elvis Brayan Llampasi Espino – Escuela Profesional de Ingeniería de Sistemas, UNSCH
