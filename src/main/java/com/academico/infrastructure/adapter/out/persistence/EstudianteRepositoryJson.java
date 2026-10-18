@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//modificacion implements
+// Adaptador de salida: guarda los estudiantes en un archivo JSON
 public class EstudianteRepositoryJson implements EstudianteRepository {
     private final String archivo="data/estudiantes.json";
     private final Gson gson=new Gson();
@@ -20,11 +20,8 @@ public class EstudianteRepositoryJson implements EstudianteRepository {
     @Override
     public void guardar(Estudiante estudiante) {
         List<Estudiante> estudiantes=listar();
-        try (Writer writer = new FileWriter(archivo)) {
-            gson.toJson(estudiantes,writer);
-        }catch (IOException e){
-            System.out.println("Error al guardar Estudiante");
-        }
+        estudiantes.add(estudiante);
+        guardarLista(estudiantes);
     }
 
     @Override
@@ -40,46 +37,44 @@ public class EstudianteRepositoryJson implements EstudianteRepository {
 
     @Override
     public Optional<Estudiante> buscarPorId(int id) {
-       return null;
+        for (Estudiante e : listar()) {
+            if (e.getId() == id) {
+                return Optional.of(e);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
     public boolean actualizar(Estudiante estudiante) {
-        return true;
+        List<Estudiante> estudiantes=listar();
+        for (Estudiante e : estudiantes) {
+            if (e.getId() == estudiante.getId()) {
+                e.setNombre(estudiante.getNombre());
+                e.setCorreo(estudiante.getCorreo());
+                guardarLista(estudiantes);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean eliminar(int id) {
-        return true;
+        List<Estudiante> estudiantes=listar();
+        boolean eliminado=estudiantes.removeIf(e -> e.getId() == id);
+        if (eliminado) {
+            guardarLista(estudiantes);
+        }
+        return eliminado;
     }
 
-
-
-
-  /*
-
-@Override
-public List <Estudiante> listar(){
-    try (Reader reader = new FileReader(archivo)) {
-        Type tipo= new TypeToken <List<Estudiante>>() {}.getType();
-        List<Estudiante> estudiantes=gson.fromJson(reader,tipo);
-        return estudiantes !=null? estudiantes:new ArrayList<>();
-    } catch (IOException e){
-        return new ArrayList<>();
+    // Escribe la lista completa en el archivo JSON
+    private void guardarLista(List<Estudiante> estudiantes) {
+        try (Writer writer = new FileWriter(archivo)) {
+            gson.toJson(estudiantes,writer);
+        }catch (IOException e){
+            System.out.println("Error al guardar Estudiante");
+        }
     }
-}
-
-@Override
-public void guardar(List<Estudiante> estudiantes){
-    try (Writer writer = new FileWriter(archivo)) {
-        gson.toJson(estudiantes,writer);
-    }catch (IOException e){
-        System.out.println("Error al guardar Estudiante");
-    }
-}
-
-
-   */
-
-
 }
