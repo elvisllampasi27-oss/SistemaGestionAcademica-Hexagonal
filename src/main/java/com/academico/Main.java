@@ -13,8 +13,8 @@ public class Main {
     public static void main(String[] args) {
 
         // 1. Adaptador de salida: almacena en JSON
-        //EstudianteRepository repository=new EstudianteRepositoryJson();
-        EstudianteRepository repository=new EstudianteRepositoryPostgres();
+        EstudianteRepository repository=new EstudianteRepositoryJson();
+        //EstudianteRepository repository=new EstudianteRepositoryPostgres();
 
 
         //2. Nucleo de la aplicacion: caso de uso
